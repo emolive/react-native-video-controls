@@ -33,7 +33,8 @@ export default class VideoPlayer extends Component {
     rate: 1,
     showTimeRemaining: true,
     showHours: false,
-    like: true
+    like: true,
+    likeCnt:''
   };
 
   constructor(props) {
@@ -82,6 +83,7 @@ export default class VideoPlayer extends Component {
       playInBackground: this.props.playInBackground,
       repeat: this.props.repeat,
       title: this.props.title,
+      likeCnt: this.props.likeCnt
     };
 
     /**
@@ -1079,7 +1081,7 @@ export default class VideoPlayer extends Component {
           style={[styles.controls.column]}
           imageStyle={[styles.controls.vignette]}>
           {seekbarControl} 
-          <View style={{width: '100%', height: 50, backgroundColor: 'red'}}>{toggleLike}</View>
+          <View style={{width: '100%', height: 50, backgroundColor: 'red'}}>{toggleLike}{this.renderLikeCnt()}</View>
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
             {playPauseControl}
@@ -1179,6 +1181,23 @@ export default class VideoPlayer extends Component {
 
     return null;
   }
+  renderLikeCnt() {
+    if (this.opts.likeCnt) {
+      return (
+        <View style={[styles.controls.control, styles.controls.title]}>
+          <Text
+            style={[styles.controls.text, styles.controls.titleText]}
+            numberOfLines={1}>
+            {this.opts.likeCnt || ''}
+          </Text>
+        </View>
+      );
+    }
+
+    return null;
+  }
+
+  
 
   /**
    * Show our timer.

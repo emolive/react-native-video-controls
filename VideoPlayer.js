@@ -24,7 +24,7 @@ export default class VideoPlayer extends Component {
     playWhenInactive: false,
     resizeMode: 'contain',
     isFullscreen: false,
-    showOnStart: true,
+    showOnStart: false,
     paused: false,
     repeat: false,
     muted: false,
@@ -33,6 +33,7 @@ export default class VideoPlayer extends Component {
     rate: 1,
     showTimeRemaining: true,
     showHours: false,
+    like: true
   };
 
   constructor(props) {
@@ -70,6 +71,7 @@ export default class VideoPlayer extends Component {
       currentTime: 0,
       error: false,
       duration: 0,
+      like: this.props.like
     };
 
     /**
@@ -100,6 +102,7 @@ export default class VideoPlayer extends Component {
       onLoad: this._onLoad.bind(this),
       onPause: this.props.onPause,
       onPlay: this.props.onPlay,
+      toggleLike: this.props.toggleLike
     };
 
     /**
@@ -110,6 +113,7 @@ export default class VideoPlayer extends Component {
       togglePlayPause: this._togglePlayPause.bind(this),
       toggleControls: this._toggleControls.bind(this),
       toggleTimer: this._toggleTimer.bind(this),
+      toggleLike: this._toggleLike.bind(this)
     };
 
     /**
@@ -523,6 +527,13 @@ export default class VideoPlayer extends Component {
   _toggleTimer() {
     let state = this.state;
     state.showTimeRemaining = !state.showTimeRemaining;
+    this.setState(state);
+  }
+
+  _toggleLike(){
+    this.props.toggleLike()
+    let state = this.state;
+    state.like = !state.like;
     this.setState(state);
   }
 
@@ -1051,6 +1062,8 @@ export default class VideoPlayer extends Component {
       ? this.renderNullControl()
       : this.renderPlayPause();
 
+    const toggleLike = this.renderLike();
+
     return (
       <Animated.View
         style={[
@@ -1060,11 +1073,13 @@ export default class VideoPlayer extends Component {
             marginBottom: this.animations.bottomControl.marginBottom,
           },
         ]}>
+         
         <ImageBackground
           source={require('./assets/img/bottom-vignette.png')}
           style={[styles.controls.column]}
           imageStyle={[styles.controls.vignette]}>
-          {seekbarControl}
+          {seekbarControl} 
+          <View style={{width: '100%', height: 50, backgroundColor: 'red'}}>{toggleLike}</View>
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
             {playPauseControl}
@@ -1132,6 +1147,20 @@ export default class VideoPlayer extends Component {
     );
   }
 
+  /**
+   * Render the play/pause button and show the respective icon
+   */
+  renderLike(){
+    let source =
+    this.state.like === true
+      ? require('./assets/img/icoHeartBlack.png')
+      : require('./assets/img/icoHeartOnBlue.png');
+  return this.renderControl(
+    <Image source={source} style={{width: 40, height: 40}}/>,
+    this.methods.toggleLike,
+    styles.controls.playPause,
+  );
+  }
   /**
    * Render our title...if supplied.
    */

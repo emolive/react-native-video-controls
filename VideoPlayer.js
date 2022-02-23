@@ -34,7 +34,8 @@ export default class VideoPlayer extends Component {
     showTimeRemaining: true,
     showHours: false,
     like: true,
-    likeCnt:''
+    likeCnt:0,
+    playCnt: 0
   };
 
   constructor(props) {
@@ -83,7 +84,8 @@ export default class VideoPlayer extends Component {
       playInBackground: this.props.playInBackground,
       repeat: this.props.repeat,
       title: this.props.title,
-      likeCnt: this.props.likeCnt
+      likeCnt: this.props.likeCnt,
+      playCnt: this.props.playCnt
     };
 
     /**
@@ -1081,7 +1083,7 @@ export default class VideoPlayer extends Component {
           style={[styles.controls.column]}
           imageStyle={[styles.controls.vignette]}>
           {seekbarControl} 
-          <View style={{width: '100%', height: 50, backgroundColor: 'red'}}>{toggleLike}{this.renderLikeCnt()}</View>
+          <View style={{width: '100%', height: 50, backgroundColor: 'red',flexDirection: 'row'}}>{toggleLike}{this.renderLikeCnt()}{this.renderPlayCnt()}</View>
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
             {playPauseControl}
@@ -1182,13 +1184,13 @@ export default class VideoPlayer extends Component {
     return null;
   }
   renderLikeCnt() {
-    if (this.opts.likeCnt) {
+    if (!isNaN(this.opts.likeCnt)) {
       return (
         <View style={[styles.controls.control, styles.controls.title]}>
           <Text
             style={[styles.controls.text, styles.controls.titleText]}
             numberOfLines={1}>
-            {this.opts.likeCnt || ''}
+            {this.opts.likeCnt}
           </Text>
         </View>
       );
@@ -1196,7 +1198,21 @@ export default class VideoPlayer extends Component {
 
     return null;
   }
+  renderPlayCnt() {
+    if (!isNaN(this.opts.playCnt)) {
+      return (
+        <View style={[styles.controls.control, styles.controls.title]}>
+          <Text
+            style={[styles.controls.text, styles.controls.titleText]}
+            numberOfLines={1}>
+            {this.opts.playCnt}
+          </Text>
+        </View>
+      );
+    }
 
+    return null;
+  }
   
 
   /**

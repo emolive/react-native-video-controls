@@ -1164,7 +1164,7 @@ export default class VideoPlayer extends Component {
   renderLike(){
     let source =
     this.state.like === true
-      ? require('./assets/img/icoHeartBlack.png')
+      ? require('./assets/img/icoHeartGray.png')
       : require('./assets/img/icoHeartOnBlue.png');
   return <TouchableOpacity onPress={()=>this.methods.toggleLike()} style={{width: 30, height: 30, alignItems: 'center', justifyContent: 'center'}}>
     <Image source={source} style={{width: 20, height: 20, marginRight: 5}}/>

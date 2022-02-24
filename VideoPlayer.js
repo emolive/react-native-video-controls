@@ -107,7 +107,8 @@ export default class VideoPlayer extends Component {
       onLoad: this._onLoad.bind(this),
       onPause: this.props.onPause,
       onPlay: this.props.onPlay,
-      toggleLike: this.props.toggleLike
+      toggleLike: this.props.toggleLike,
+      toggleSub: this.props.toggleSub
     };
 
     /**
@@ -1070,6 +1071,7 @@ export default class VideoPlayer extends Component {
     const toggleLike = this.renderLike();
 
     const renderView = this.renderViewIcon()
+    const renderSub = this.renderSub()
     return (
       <Animated.View
         style={[
@@ -1086,6 +1088,7 @@ export default class VideoPlayer extends Component {
           imageStyle={[styles.controls.vignette]}>
           
           <View style={{width: '100%', height: 30, flexDirection: 'row', justifyContent: 'flex-end'}}>
+            <View>{renderSub}</View>
            <View >{toggleLike}</View>
            <View>{this.renderLikeCnt()}</View>
            <View >{renderView}</View>
@@ -1167,6 +1170,14 @@ export default class VideoPlayer extends Component {
       ? require('./assets/img/icoHeartGray.png')
       : require('./assets/img/icoHeartOnBlue.png');
   return <TouchableOpacity onPress={()=>this.methods.toggleLike()} style={{width: 30, height: 30, alignItems: 'center', justifyContent: 'center'}}>
+    <Image source={source} style={{width: 20, height: 20, marginRight: 5}}/>
+    </TouchableOpacity>
+    
+  }
+
+  renderSub(){
+    let source =require('./assets/img/ico_cc_off.png');
+  return <TouchableOpacity onPress={()=>this.props.toggleSub()} style={{width: 30, height: 30, alignItems: 'center', justifyContent: 'center'}}>
     <Image source={source} style={{width: 20, height: 20, marginRight: 5}}/>
     </TouchableOpacity>
     

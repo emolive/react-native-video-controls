@@ -14,6 +14,7 @@ import {
   Text,
 } from 'react-native';
 import padStart from 'lodash/padStart';
+import { TouchableOpacity } from 'react-native';
 
 export default class VideoPlayer extends Component {
   static defaultProps = {
@@ -1084,11 +1085,11 @@ export default class VideoPlayer extends Component {
           style={[styles.controls.column]}
           imageStyle={[styles.controls.vignette]}>
           
-          <View style={{width: '100%', height: 50, flexDirection: 'row', justifyContent: 'flex-end'}}>
-           <View style={{backgroundColor: 'yellow'}}>{toggleLike}</View>
-           <View style={{backgroundColor: 'blue', }}>{this.renderLikeCnt()}</View>
-           <View style={{backgroundColor: 'yellow'}}>{renderView}</View>
-           <View style={{backgroundColor: 'green'}}>{this.renderPlayCnt()}</View>
+          <View style={{width: '100%', height: 30, flexDirection: 'row', justifyContent: 'flex-end'}}>
+           <View >{toggleLike}</View>
+           <View>{this.renderLikeCnt()}</View>
+           <View >{renderView}</View>
+           <View >{this.renderPlayCnt()}</View>
            </View>{seekbarControl} 
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
@@ -1165,20 +1166,15 @@ export default class VideoPlayer extends Component {
     this.state.like === true
       ? require('./assets/img/icoHeartBlack.png')
       : require('./assets/img/icoHeartOnBlue.png');
-  return this.renderControl(
-    <Image source={source} style={{width: 20, height: 20, backgroundColor: 'red'}}/>,
-    this.methods.toggleLike,
-    {}
-  );
+  return <TouchableOpacity onPress={()=>this.methods.toggleLike()} style={{width: 30, height: 30, alignItems: 'center', justifyContent: 'center'}}>
+    <Image source={source} style={{width: 20, height: 20, marginRight: 5}}/>
+    </TouchableOpacity>
+    
   }
 
   renderViewIcon(){
     let source = require('./assets/img/icoViewGray.png');
-  return this.renderControl(
-    <Image source={source} style={{width: 20, height: 20}}/>,
-    this.methods.toggleLike,
-    {}
-  );
+  return <View style={{width: 30, height: 30, alignItems: 'center', justifyContent: 'center'}}><Image source={source} style={{width: 20, height: 20, marginRight: 5}}/></View>
   }
   /**
    * Render our title...if supplied.
@@ -1216,7 +1212,7 @@ export default class VideoPlayer extends Component {
   renderPlayCnt() {
     if (!isNaN(this.opts.playCnt)) {
       return (
-        <View style={ {justifyContent: 'center', height: '100%'}}>
+        <View style={ {justifyContent: 'center', height: '100%', marginRight: 5}}>
           <Text
             style={[styles.controls.text, styles.controls.titleText]}
             numberOfLines={1}>

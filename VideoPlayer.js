@@ -1083,13 +1083,13 @@ export default class VideoPlayer extends Component {
           source={require('./assets/img/bottom-vignette.png')}
           style={[styles.controls.column]}
           imageStyle={[styles.controls.vignette]}>
-          {seekbarControl} 
-          <View style={{width: '100%', height: 50, backgroundColor: 'red',flexDirection: 'row'}}>
+          
+          <View style={{width: '100%', height: 50, flexDirection: 'row', justifyContent: 'flex-end'}}>
            <View style={{backgroundColor: 'yellow'}}>{toggleLike}</View>
            <View style={{backgroundColor: 'blue', }}>{this.renderLikeCnt()}</View>
            <View style={{backgroundColor: 'yellow'}}>{renderView}</View>
            <View style={{backgroundColor: 'green'}}>{this.renderPlayCnt()}</View>
-           </View>
+           </View>{seekbarControl} 
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
             {playPauseControl}
@@ -1166,7 +1166,7 @@ export default class VideoPlayer extends Component {
       ? require('./assets/img/icoHeartBlack.png')
       : require('./assets/img/icoHeartOnBlue.png');
   return this.renderControl(
-    <Image source={source} style={{width: 20, height: 20}}/>,
+    <Image source={source} style={{width: 20, height: 20, backgroundColor: 'red'}}/>,
     this.methods.toggleLike,
     {}
   );

@@ -1068,6 +1068,7 @@ export default class VideoPlayer extends Component {
 
     const toggleLike = this.renderLike();
 
+    const renderView = this.renderViewIcon()
     return (
       <Animated.View
         style={[
@@ -1083,7 +1084,12 @@ export default class VideoPlayer extends Component {
           style={[styles.controls.column]}
           imageStyle={[styles.controls.vignette]}>
           {seekbarControl} 
-          <View style={{width: '100%', height: 50, backgroundColor: 'red',flexDirection: 'row'}}>{toggleLike}{this.renderLikeCnt()}{this.renderPlayCnt()}</View>
+          <View style={{width: '100%', height: 50, backgroundColor: 'red',flexDirection: 'row'}}>
+           <View style={{backgroundColor: 'yellow'}}>{toggleLike}</View>
+           <View style={{backgroundColor: 'blue', }}>{this.renderLikeCnt()}</View>
+           <View style={{backgroundColor: 'yellow'}}>{renderView}</View>
+           <View style={{backgroundColor: 'green'}}>{this.renderPlayCnt()}</View>
+           </View>
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
             {playPauseControl}
@@ -1160,9 +1166,18 @@ export default class VideoPlayer extends Component {
       ? require('./assets/img/icoHeartBlack.png')
       : require('./assets/img/icoHeartOnBlue.png');
   return this.renderControl(
-    <Image source={source} style={{width: 40, height: 40}}/>,
+    <Image source={source} style={{width: 20, height: 20}}/>,
     this.methods.toggleLike,
-    styles.controls.playPause,
+    {}
+  );
+  }
+
+  renderViewIcon(){
+    let source = require('./assets/img/icoViewGray.png');
+  return this.renderControl(
+    <Image source={source} style={{width: 20, height: 20}}/>,
+    this.methods.toggleLike,
+    {}
   );
   }
   /**
@@ -1186,7 +1201,7 @@ export default class VideoPlayer extends Component {
   renderLikeCnt() {
     if (!isNaN(this.opts.likeCnt)) {
       return (
-        <View style={[styles.controls.control, styles.controls.title]}>
+        <View style={ {justifyContent: 'center', height: '100%'}}>
           <Text
             style={[styles.controls.text, styles.controls.titleText]}
             numberOfLines={1}>
@@ -1201,7 +1216,7 @@ export default class VideoPlayer extends Component {
   renderPlayCnt() {
     if (!isNaN(this.opts.playCnt)) {
       return (
-        <View style={[styles.controls.control, styles.controls.title]}>
+        <View style={ {justifyContent: 'center', height: '100%'}}>
           <Text
             style={[styles.controls.text, styles.controls.titleText]}
             numberOfLines={1}>

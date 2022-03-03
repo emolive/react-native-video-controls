@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import padStart from 'lodash/padStart';
 import { TouchableOpacity } from 'react-native';
-
+// bocastle 입장
 export default class VideoPlayer extends Component {
   static defaultProps = {
     toggleResizeModeOnFullscreen: true,

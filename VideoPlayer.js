@@ -34,9 +34,9 @@ export default class VideoPlayer extends Component {
     rate: 1,
     showTimeRemaining: true,
     showHours: false,
-    like: true,
-    likeCnt:0,
-    playCnt: 0
+    like: true, //추가
+    likeCnt:0, //추가
+    playCnt: 0 //추가
   };
 
   constructor(props) {

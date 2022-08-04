@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import padStart from 'lodash/padStart';
 import { TouchableOpacity } from 'react-native';
+import { Platform } from 'react-native';
 // bocastle 입장
 export default class VideoPlayer extends Component {
   static defaultProps = {
@@ -34,9 +35,13 @@ export default class VideoPlayer extends Component {
     rate: 1,
     showTimeRemaining: true,
     showHours: false,
-    like: true, //추가
-    likeCnt:0, //추가
-    playCnt: 0 //추가
+    like: true,
+    subCc: '',
+    likeCnt:0,
+    playCnt:0,
+    isPortrait:'',
+    vttYn:'',
+    userName:''
   };
 
   constructor(props) {
@@ -74,7 +79,8 @@ export default class VideoPlayer extends Component {
       currentTime: 0,
       error: false,
       duration: 0,
-      like: this.props.like
+      like: this.props.like,
+      subCc: this.props.subCc
     };
 
     /**
@@ -86,7 +92,10 @@ export default class VideoPlayer extends Component {
       repeat: this.props.repeat,
       title: this.props.title,
       likeCnt: this.props.likeCnt,
-      playCnt: this.props.playCnt
+      playCnt: this.props.playCnt,
+      isPortrait: this.props.isPortrait,
+      vttYn: this.props.vttYn,
+      userName: this.props.userName
     };
 
     /**
@@ -108,6 +117,7 @@ export default class VideoPlayer extends Component {
       onPause: this.props.onPause,
       onPlay: this.props.onPlay,
       toggleLike: this.props.toggleLike,
+      toggleSubCc: this.props.toggleSubCc,
       toggleSub: this.props.toggleSub
     };
 
@@ -119,7 +129,8 @@ export default class VideoPlayer extends Component {
       togglePlayPause: this._togglePlayPause.bind(this),
       toggleControls: this._toggleControls.bind(this),
       toggleTimer: this._toggleTimer.bind(this),
-      toggleLike: this._toggleLike.bind(this)
+      toggleLike: this._toggleLike.bind(this),
+      toggleSubCc: this._toggleSubCc.bind(this)
     };
 
     /**
@@ -540,6 +551,13 @@ export default class VideoPlayer extends Component {
     this.props.toggleLike()
     let state = this.state;
     state.like = !state.like;
+    this.setState(state);
+  }
+
+  _toggleSubCc(){
+    this.props.toggleSubCc()
+    let state = this.state;
+    state.subCc = !state.subCc;
     this.setState(state);
   }
 
@@ -975,30 +993,146 @@ export default class VideoPlayer extends Component {
     const fullscreenControl = this.props.disableFullscreen
       ? this.renderNullControl()
       : this.renderFullscreen();
+      const renderView = this.renderViewIcon();
+      const toggleLike = this.renderLike();
+      const toggleSubCc = this.renderSub();
+      const isPortrait = this.props.isPortrait
+      const vttYn = this.props.vttYn
+      
+      if(isPortrait === 'N'){
+        return (
+          <Animated.View
+            style={[
+              styles.controls.top,
+              {
+                opacity: this.animations.topControl.opacity,
+                marginTop: this.animations.topControl.marginTop,
+              },
+            ]}>
+            <ImageBackground
+              source={require('./assets/img/top-vignette.png')}
+              style={[styles.controls.column]}
+              imageStyle={[styles.controls.vignette]}>
+              <SafeAreaView style={styles.controls.topControlGroup}>
+                {/* <View style={{height:'100%'}}>{backControl}</View> */}
+                <View style={{width:'100%',marginTop:10,flexDirection:'row'}}>
+                  <View style={{width:'5%',alignItems:'center'}}>
+                    <View style={{width:'100%'}}>
 
-    return (
-      <Animated.View
-        style={[
-          styles.controls.top,
-          {
-            opacity: this.animations.topControl.opacity,
-            marginTop: this.animations.topControl.marginTop,
-          },
-        ]}>
-        <ImageBackground
-          source={require('./assets/img/top-vignette.png')}
-          style={[styles.controls.column]}
-          imageStyle={[styles.controls.vignette]}>
-          <SafeAreaView style={styles.controls.topControlGroup}>
-            {backControl}
-            <View style={styles.controls.pullRight}>
-              {volumeControl}
-              {fullscreenControl}
-            </View>
-          </SafeAreaView>
-        </ImageBackground>
-      </Animated.View>
-    );
+                    {backControl}
+                    </View>
+                  </View>
+                  <View style={{width:'75%'}}>
+                    <View style={{width:'100%'}}>{this.renderTopTitle()}</View>
+                    <View style={{width:'100%',marginTop:2,flexDirection:'row'}}>
+                      
+                        {this.renderUserName()}
+                        <Text  style={[styles.controls.text, styles.controls.titleText]}>  View </Text>
+                        {this.renderPlayCnt()}
+                      
+                      {/* <View style={{backgroundColor:"black"}}><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View> */}
+                      {/* <View style={{backgroundColor:"blue"}}>{this.renderPlayCnt()}</View> */}
+                    </View>
+                  </View>
+                  <View style={Platform.OS === 'ios'? {width:'20%',flexDirection:'row',justifyContent:'flex-end',marginLeft:30} :{width:'20%',flexDirection:'row'} }>
+                    <View style={{width:'30%'}}>
+      
+                      <View >{toggleLike}</View>
+                      <View >{this.renderLikeCnt()}</View>
+                    </View>
+                    {/* <View style={{display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View> */}
+                    <View style={{width:'30%'}}>
+
+                    {toggleSubCc}
+                    </View>
+                    <View style={{width:'30%'}}>
+
+                    {fullscreenControl}
+                    </View>
+                    
+                  </View>
+                </View>
+                {/* <View style={[styles.controls.topCenter,{backgroundColor:'pink'}]}>
+                  <View style={styles.controls.topTitleCenter}>
+                    <View >{this.renderTopTitle()}</View>
+                  </View>
+                  <View style={styles.controls.ViewCenter}>
+    
+                    <View>           
+                      <View>{this.renderUserName()}</View>
+                    </View>
+                    <View style={styles.controls.ViewCenter}>           
+                      <View >{renderView}</View>
+                      <View ><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View>
+                      <View >{this.renderPlayCnt()}</View>
+                    </View>
+                  </View>
+                </View>
+                <View style={[styles.controls.pullRightCenter,{justifyContent:'flex-end'}]}>
+                  <View>
+    
+                  <View>{toggleLike}</View>
+                  <View >{this.renderLikeCnt()}</View>
+                  </View>
+                  <View style={{display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View>
+                  <View style={{width:50,height:60,justifyContent:'flex-end'}}>{fullscreenControl}</View>
+                  
+                </View> */}
+                  {/* {volumeControl} */}
+              </SafeAreaView>
+            </ImageBackground>
+          </Animated.View>
+        );
+      }
+      if(isPortrait === 'Y'){
+        return (
+          <Animated.View
+            style={[
+              styles.controls.top,
+              {
+                opacity: this.animations.topControl.opacity,
+                marginTop: this.animations.topControl.marginTop,
+              },
+            ]}>
+            <ImageBackground
+              source={require('./assets/img/top-vignette.png')}
+              style={[styles.controls.column]}
+              imageStyle={[styles.controls.vignette]}>
+              <SafeAreaView style={styles.controls.topControlGroupPortrait}>
+                {/* {backControl} */}
+                <View style={{width:'15%',alignItems:'flex-end'}}>{backControl}</View>
+                <View style={styles.controls.topCenterPortrait}>
+                  <View style={styles.controls.topTitleCenterPortrait}>
+                    <View >{this.renderTopTitle()}</View>
+                  </View>
+                  <View style={styles.controls.ViewCenterPortrait}>
+    
+                    <View>           
+                      <View>{this.renderUserName()}</View>
+                    </View>
+                    <View style={styles.controls.ViewCenter}>           
+                      {/* <View >{renderView}</View> */}
+                      <View ><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View>
+                      <View >{this.renderPlayCnt()}</View>
+                    </View>
+                  </View>
+                </View>
+                <View style={[styles.controls.pullRightCenter,{width:'38%',justifyContent:'flex-end'}]}>
+                  <View style={{paddingTop:11}}>
+                    <View>{toggleLike}</View>
+                    <View >{this.renderLikeCnt()}</View>
+                  </View>
+                  <View style={{paddingTop:12,display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View>
+                  <View style={{width:50,height:50,justifyContent:'flex-start'}}>{fullscreenControl}</View>
+                  
+                </View>
+                  {/* {volumeControl} */}
+              </SafeAreaView>
+            </ImageBackground>
+          </Animated.View>
+        );
+      }
+    
   }
 
   /**
@@ -1006,10 +1140,15 @@ export default class VideoPlayer extends Component {
    */
   renderBack() {
     return this.renderControl(
+      
+      <TouchableOpacity onPress={()=>this.events.onBack()} style={{width:'100%',height:42,paddingLeft:10,paddingTop:5}}>
+
       <Image
         source={require('./assets/img/back.png')}
-        style={styles.controls.back}
-      />,
+        style={[styles.controls.back]}
+        />
+        </TouchableOpacity>
+      ,
       this.events.onBack,
       styles.controls.back,
     );
@@ -1048,7 +1187,10 @@ export default class VideoPlayer extends Component {
         ? require('./assets/img/shrink.png')
         : require('./assets/img/expand.png');
     return this.renderControl(
-      <Image source={source} />,
+      <TouchableOpacity onPress={()=>this.methods.toggleFullscreen()} style={{width: '100%', height: this.props.isPortrait === 'N'?27.5:27.5, alignItems: 'center', justifyContent: this.props.isPortrait === 'N' ?'center':'flex-start'}}>
+
+        <Image source={source}  style={{width: 20, height: 20}}/>
+      </TouchableOpacity>,
       this.methods.toggleFullscreen,
       styles.controls.fullscreen,
     );
@@ -1070,7 +1212,7 @@ export default class VideoPlayer extends Component {
 
     const toggleLike = this.renderLike();
 
-    const renderView = this.renderViewIcon()
+    const renderView = this.renderViewIcon();
     const renderSub = this.renderSub()
     return (
       <Animated.View
@@ -1086,20 +1228,20 @@ export default class VideoPlayer extends Component {
           source={require('./assets/img/bottom-vignette.png')}
           style={[styles.controls.column]}
           imageStyle={[styles.controls.vignette]}>
-          
-          <View style={{width: '100%', height: 30, flexDirection: 'row', justifyContent: 'flex-end'}}>
-            <View>{renderSub}</View>
-           <View >{toggleLike}</View>
-           <View>{this.renderLikeCnt()}</View>
-           <View >{renderView}</View>
-           <View >{this.renderPlayCnt()}</View>
-           </View>{seekbarControl} 
+           {Platform.OS === 'ios' ?
+           <View style={{width:'94%'}}>
+           {seekbarControl} 
+           </View>
+            :
+           {seekbarControl} 
+            }
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>
+
             {playPauseControl}
-            {this.renderTitle()}
             {timerControl}
           </SafeAreaView>
+        
         </ImageBackground>
       </Animated.View>
     );
@@ -1155,7 +1297,9 @@ export default class VideoPlayer extends Component {
         ? require('./assets/img/play.png')
         : require('./assets/img/pause.png');
     return this.renderControl(
-      <Image source={source} />,
+      <TouchableOpacity onPress={()=>this.methods.togglePlayPause()} style={{width:'100%',height:30 ,justifyContent:'center',paddingLeft:10}}>
+      <Image source={source} />
+      </TouchableOpacity>,
       this.methods.togglePlayPause,
       styles.controls.playPause,
     );
@@ -1167,25 +1311,31 @@ export default class VideoPlayer extends Component {
   renderLike(){
     let source =
     this.state.like === true
-      ? require('./assets/img/icoHeartGray.png')
-      : require('./assets/img/icoHeartOnBlue.png');
-  return <TouchableOpacity onPress={()=>this.methods.toggleLike()} style={{width: 30, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-    <Image source={source} style={{width: 20, height: 20, marginRight: 5}}/>
+      ? require('./assets/img/ico_heart_off.png')
+      : require('./assets/img/ico_heart_on.png');
+  return <TouchableOpacity onPress={()=>this.methods.toggleLike()} style={{width: '100%', height: this.props.isPortrait === 'N'?27.5:27.5, alignItems: 'center', justifyContent: this.props.isPortrait === 'N' ?'flex-end':'flex-start'}}>
+
+    <Image source={source} style={{width: 30, height: 30}}/>
     </TouchableOpacity>
     
   }
 
   renderSub(){
-    let source =require('./assets/img/ico_cc_off.png');
-  return <TouchableOpacity onPress={()=>this.props.toggleSub()} style={{width: 30, height: 30, alignItems: 'center', justifyContent: 'center'}}>
-    <Image source={source} style={{width: 20, height: 20, marginRight: 5}}/>
+    let source =
+    this.state.subCc === true
+      ? require('./assets/img/ico_cc_on.png')
+      : require('./assets/img/ico_cc_off.png');
+    // let source =require('./assets/img/ico_cc_off.png');
+  return <TouchableOpacity onPress={()=>this.methods.toggleSubCc()} style={{display:this.props.vttYn === true ? 'flex':'none', width: '100%', height: this.props.isPortrait === 'N'?27.5:27.5, alignItems: 'center', justifyContent: this.props.isPortrait === 'N' ?'flex-end':'flex-start'}}>
+    
+    <Image source={source} style={{width: 30, height: 30}}/>
     </TouchableOpacity>
     
   }
 
   renderViewIcon(){
     let source = require('./assets/img/icoViewGray.png');
-  return <View style={{width: 30, height: 30, alignItems: 'center', justifyContent: 'center'}}><Image source={source} style={{width: 20, height: 20, marginRight: 5}}/></View>
+  return <View style={{width: 20, height: 20, alignItems: 'center', justifyContent: 'center'}}><Image source={source} style={{width: 15, height: 15,marginRight:6}}/></View>
   }
   /**
    * Render our title...if supplied.
@@ -1205,14 +1355,43 @@ export default class VideoPlayer extends Component {
 
     return null;
   }
+  renderTopTitle() {
+    if (this.opts.title) {
+      return (
+        
+        <View style={[styles.controls.control, styles.controls.titleTop]}>
+          <Text
+            style={[styles.controls.textTop]}
+            numberOfLines={2}>
+            {this.opts.title || ''}
+          </Text>
+        </View>
+      );
+    }
+
+    return null;
+  }
   renderLikeCnt() {
     if (!isNaN(this.opts.likeCnt)) {
       return (
-        <View style={ {justifyContent: 'center', height: '100%'}}>
+        // <View style={ {justifyContent: 'center', height: '100%'}}>
+        <View style={{width:'100%',height:20,justifyContent:'flex-start'}}>
           <Text
-            style={[styles.controls.text, styles.controls.titleText]}
+            style={styles.controls.likeText}
             numberOfLines={1}>
-            {this.opts.likeCnt}
+            {this.opts.likeCnt === 0 ? '' : this.opts.likeCnt}
+          </Text>
+        </View>
+      );
+    }
+    if (this.opts.likeCnt !== '') {
+      return (
+        // <View style={ {justifyContent: 'center', height: '100%'}}>
+        <View style={{width:50,height:40,justifyContent:'flex-start'}}>
+          <Text
+            style={styles.controls.likeText}
+            numberOfLines={1}>
+            {this.opts.likeCnt === 0 ? '' : this.opts.likeCnt}
           </Text>
         </View>
       );
@@ -1223,7 +1402,7 @@ export default class VideoPlayer extends Component {
   renderPlayCnt() {
     if (!isNaN(this.opts.playCnt)) {
       return (
-        <View style={ {justifyContent: 'center', height: '100%', marginRight: 5}}>
+        <View>
           <Text
             style={[styles.controls.text, styles.controls.titleText]}
             numberOfLines={1}>
@@ -1231,6 +1410,37 @@ export default class VideoPlayer extends Component {
           </Text>
         </View>
       );
+    }
+    if(this.opts.playCnt !== ''){
+      return (
+        <View>
+          <Text
+            style={[styles.controls.text, styles.controls.titleText]}
+            numberOfLines={1}>
+            {this.opts.playCnt}
+          </Text>
+        </View>
+      );
+
+    }
+
+    return null;
+  }
+ 
+  renderUserName() {
+    
+    if(this.opts.userName !== ''){
+      return (
+        // <View style={ {justifyContent: 'center', height: '100%', marginRight: 5}}>
+        <View>
+          <Text
+            style={[styles.controls.text, styles.controls.titleText]}
+            numberOfLines={1}>
+            {this.opts.userName}  |
+          </Text>
+        </View>
+      );
+
     }
 
     return null;
@@ -1350,6 +1560,7 @@ const styles = {
       bottom: 0,
       left: 0,
     },
+    
   }),
   error: StyleSheet.create({
     container: {
@@ -1395,14 +1606,28 @@ const styles = {
       justifyContent: 'space-between',
       height: null,
       width: null,
+      
     },
     vignette: {
       resizeMode: 'stretch',
     },
     control: {
-      padding: 16,
+      padding: 0, //16
     },
     text: {
+      backgroundColor: 'transparent',
+      color: '#FFF',
+      fontSize: 14,
+      // textAlign: 'center',
+      
+    },
+    textTop: {
+      backgroundColor: 'transparent',
+      color: '#FFF',
+      fontSize: 25,
+      // textAlign: 'center',
+    },
+    likeText: {
       backgroundColor: 'transparent',
       color: '#FFF',
       fontSize: 14,
@@ -1413,15 +1638,60 @@ const styles = {
       alignItems: 'center',
       justifyContent: 'center',
     },
+    pullRightCenter: {
+      flexDirection: 'row',
+    },
+    topCenter: {
+      alignItems: 'center',
+      // justifyContent: 'center',
+      flexDirection:'column',
+      width:'70%',
+      // height:40
+    },
+    topCenterPortrait: {
+      alignItems: 'center',
+      flexDirection:'column',
+      width:'45%',
+      paddingTop:11
+      // height:40
+    },
+    topTitleCenter: {
+      // alignItems: 'center',
+      // justifyContent: 'flex-start',
+      // flexDirection:'column',
+
+      width:'100%',
+    },
+    topTitleCenterPortrait: {
+      width:'100%',
+    },
+    ViewCenter: {
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      flexDirection:'row',
+      width:'100%',
+      height:40
+    },
+    ViewCenterPortrait: {
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      flexDirection:'row',
+      width:'100%',
+      height:20
+    },
     top: {
       flex: 1,
       alignItems: 'stretch',
       justifyContent: 'flex-start',
+      
     },
     bottom: {
       alignItems: 'stretch',
       flex: 2,
       justifyContent: 'flex-end',
+   
+
+     
     },
     topControlGroup: {
       alignSelf: 'stretch',
@@ -1432,13 +1702,21 @@ const styles = {
       margin: 12,
       marginBottom: 18,
     },
+    topControlGroupPortrait: {
+      // alignSelf: 'stretch',
+      // alignItems: 'flex-start',
+      flexDirection: 'row',
+      width: null,
+      // margin: 12,
+      // marginBottom: 18,
+    },
     bottomControlGroup: {
       alignSelf: 'stretch',
       alignItems: 'center',
       justifyContent: 'space-between',
       marginLeft: 12,
       marginRight: 12,
-      marginBottom: 0,
+      marginBottom: 30,
     },
     volume: {
       flexDirection: 'row',
@@ -1457,6 +1735,17 @@ const styles = {
       flexDirection: 'column',
       padding: 0,
     },
+    titleTop: {
+      // alignItems: 'flex-start',
+      // flex: 0.6,
+      width:'100%',
+      // flexDirection: 'column',
+      // justifyContent:'center',
+      // padding: 0,
+      // backgroundColor:'gold'
+      
+  
+    },
     titleText: {
       textAlign: 'center',
     },
@@ -1469,6 +1758,8 @@ const styles = {
       fontSize: 11,
       textAlign: 'right',
     },
+    
+  
   }),
   volume: StyleSheet.create({
     container: {

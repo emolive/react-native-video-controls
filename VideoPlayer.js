@@ -1034,14 +1034,14 @@ export default class VideoPlayer extends Component {
                       {/* <View style={{backgroundColor:"blue"}}>{this.renderPlayCnt()}</View> */}
                     </View>
                   </View>
-                  <View style={Platform.OS === 'ios'? {width:'20%',flexDirection:'row',justifyContent:'flex-end',marginLeft:30} :{width:'20%',flexDirection:'row'} }>
+                  <View style={Platform.OS === 'ios'? {width:'20%',flexDirection:'row',justifyContent:'flex-end',marginLeft:30} :{width:'20%',justifyContent:'flex-end',flexDirection:'row'} }>
                     <View style={{width:'30%'}}>
       
                       <View >{toggleLike}</View>
                       <View >{this.renderLikeCnt()}</View>
                     </View>
                     {/* <View style={{display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View> */}
-                    <View style={{width:'30%'}}>
+                    <View style={{width:'30%' , display: vttYn === true ? 'flex' : 'none'}}>
 
                     {toggleSubCc}
                     </View>
@@ -1233,7 +1233,9 @@ export default class VideoPlayer extends Component {
            {seekbarControl} 
            </View>
             :
+            <>
            {seekbarControl} 
+            </>
             }
           <SafeAreaView
             style={[styles.controls.row, styles.controls.bottomControlGroup]}>

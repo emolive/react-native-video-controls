@@ -1413,8 +1413,7 @@ export default class VideoPlayer extends Component {
               marqueeDelay={1000}>
               {this.opts.title || ''}
             </TextTicker>
-
-
+          )}
         </View>
       );
     }

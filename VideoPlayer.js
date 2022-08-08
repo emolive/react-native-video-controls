@@ -1027,7 +1027,7 @@ export default class VideoPlayer extends Component {
                     <View style={{width:'100%',marginTop:2,flexDirection:'row'}}>
                       
                         {this.renderUserName()}
-                        <Text  style={[styles.controls.text, styles.controls.titleText]}>  View </Text>
+                        <Text  style={[styles.controls.text, styles.controls.titleText]}>  View  </Text>
                         {this.renderPlayCnt()}
                       
                       {/* <View style={{backgroundColor:"black"}}><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View> */}
@@ -1052,33 +1052,6 @@ export default class VideoPlayer extends Component {
                     
                   </View>
                 </View>
-                {/* <View style={[styles.controls.topCenter,{backgroundColor:'pink'}]}>
-                  <View style={styles.controls.topTitleCenter}>
-                    <View >{this.renderTopTitle()}</View>
-                  </View>
-                  <View style={styles.controls.ViewCenter}>
-    
-                    <View>           
-                      <View>{this.renderUserName()}</View>
-                    </View>
-                    <View style={styles.controls.ViewCenter}>           
-                      <View >{renderView}</View>
-                      <View ><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View>
-                      <View >{this.renderPlayCnt()}</View>
-                    </View>
-                  </View>
-                </View>
-                <View style={[styles.controls.pullRightCenter,{justifyContent:'flex-end'}]}>
-                  <View>
-    
-                  <View>{toggleLike}</View>
-                  <View >{this.renderLikeCnt()}</View>
-                  </View>
-                  <View style={{display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View>
-                  <View style={{width:50,height:60,justifyContent:'flex-end'}}>{fullscreenControl}</View>
-                  
-                </View> */}
-                  {/* {volumeControl} */}
               </SafeAreaView>
             </ImageBackground>
           </Animated.View>
@@ -1086,50 +1059,103 @@ export default class VideoPlayer extends Component {
       }
       if(isPortrait === 'Y'){
         return (
-          <Animated.View
-            style={[
-              styles.controls.top,
-              {
-                opacity: this.animations.topControl.opacity,
-                marginTop: this.animations.topControl.marginTop,
-              },
-            ]}>
-            <ImageBackground
-              source={require('./assets/img/top-vignette.png')}
-              style={[styles.controls.column]}
-              imageStyle={[styles.controls.vignette]}>
-              <SafeAreaView style={styles.controls.topControlGroupPortrait}>
-                {/* {backControl} */}
-                <View style={{width:'15%',alignItems:'flex-end'}}>{backControl}</View>
-                <View style={styles.controls.topCenterPortrait}>
-                  <View style={styles.controls.topTitleCenterPortrait}>
-                    <View >{this.renderTopTitle()}</View>
-                  </View>
-                  <View style={styles.controls.ViewCenterPortrait}>
+          // <Animated.View
+          //   style={[
+          //     styles.controls.top,
+          //     {
+          //       opacity: this.animations.topControl.opacity,
+          //       marginTop: this.animations.topControl.marginTop,
+          //     },
+          //   ]}>
+          //   <ImageBackground
+          //     source={require('./assets/img/top-vignette.png')}
+          //     style={[styles.controls.column]}
+          //     imageStyle={[styles.controls.vignette]}>
+          //     <SafeAreaView style={styles.controls.topControlGroupPortrait}>
+          //       {/* {backControl} */}
+          //       <View style={{width:'15%',alignItems:'flex-end'}}>{backControl}</View>
+          //       <View style={styles.controls.topCenterPortrait}>
+          //         <View style={styles.controls.topTitleCenterPortrait}>
+          //           <View >{this.renderTopTitle()}</View>
+          //         </View>
+          //         <View style={styles.controls.ViewCenterPortrait}>
     
-                    <View>           
-                      <View>{this.renderUserName()}</View>
-                    </View>
-                    <View style={styles.controls.ViewCenter}>           
-                      {/* <View >{renderView}</View> */}
-                      <View ><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View>
-                      <View >{this.renderPlayCnt()}</View>
-                    </View>
+          //           <View>           
+          //             <View>{this.renderUserName()}</View>
+          //           </View>
+          //           <View style={styles.controls.ViewCenter}>           
+          //             {/* <View >{renderView}</View> */}
+          //             <View ><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View>
+          //             <View >{this.renderPlayCnt()}</View>
+          //           </View>
+          //         </View>
+          //       </View>
+          //       <View style={[styles.controls.pullRightCenter,{width:'38%',justifyContent:'flex-end'}]}>
+          //         <View style={{paddingTop:11}}>
+          //           <View>{toggleLike}</View>
+          //           <View >{this.renderLikeCnt()}</View>
+          //         </View>
+          //         <View style={{paddingTop:12,display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View>
+          //         <View style={{width:50,height:50,justifyContent:'flex-start'}}>{fullscreenControl}</View>
+                  
+          //       </View>
+          //     </SafeAreaView>
+          //   </ImageBackground>
+          // </Animated.View>
+          <Animated.View
+          style={[
+            styles.controls.top,
+            {
+              opacity: this.animations.topControl.opacity,
+              marginTop: this.animations.topControl.marginTop,
+            },
+          ]}>
+          <ImageBackground
+            source={require('./assets/img/top-vignette.png')}
+            style={[styles.controls.column]}
+            imageStyle={[styles.controls.vignette]}>
+            <SafeAreaView style={styles.controls.topControlGroup}>
+              {/* <View style={{height:'100%'}}>{backControl}</View> */}
+              <View style={{width:'100%',flexDirection:'row'}}>
+                <View style={{width:'10%',alignItems:'center'}}>
+                  <View style={{width:'100%'}}>
+
+                  {backControl}
                   </View>
                 </View>
-                <View style={[styles.controls.pullRightCenter,{width:'38%',justifyContent:'flex-end'}]}>
-                  <View style={{paddingTop:11}}>
-                    <View>{toggleLike}</View>
+                <View style={{width:'50%'}}>
+                  <View style={{width:'100%'}}>{this.renderTopTitle()}</View>
+                  <View style={{width:'100%',marginTop:2,flexDirection:'row'}}>
+                    
+                      {this.renderUserName()}
+                      <Text  style={[styles.controls.text, styles.controls.titleText]}>  View  </Text>
+                      {this.renderPlayCnt()}
+                    
+                    {/* <View style={{backgroundColor:"black"}}><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View> */}
+                    {/* <View style={{backgroundColor:"blue"}}>{this.renderPlayCnt()}</View> */}
+                  </View>
+                </View>
+                <View style={Platform.OS === 'ios'? {width:'40%',flexDirection:'row',justifyContent:'flex-end'} :{width:'40%',justifyContent:'flex-end',flexDirection:'row'} }>
+                  <View style={{width:'30%'}}>
+    
+                    <View >{toggleLike}</View>
                     <View >{this.renderLikeCnt()}</View>
                   </View>
-                  <View style={{paddingTop:12,display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View>
-                  <View style={{width:50,height:50,justifyContent:'flex-start'}}>{fullscreenControl}</View>
+                  {/* <View style={{display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View> */}
+                  <View style={{width:'30%' , display: vttYn === true ? 'flex' : 'none'}}>
+
+                  {toggleSubCc}
+                  </View>
+                  <View style={{width:'30%'}}>
+
+                  {fullscreenControl}
+                  </View>
                   
                 </View>
-                  {/* {volumeControl} */}
-              </SafeAreaView>
-            </ImageBackground>
-          </Animated.View>
+              </View>
+            </SafeAreaView>
+          </ImageBackground>
+        </Animated.View>
         );
       }
     
@@ -1187,7 +1213,7 @@ export default class VideoPlayer extends Component {
         ? require('./assets/img/shrink.png')
         : require('./assets/img/expand.png');
     return this.renderControl(
-      <TouchableOpacity onPress={()=>this.methods.toggleFullscreen()} style={{width: '100%', height: this.props.isPortrait === 'N'?27.5:27.5, alignItems: 'center', justifyContent: this.props.isPortrait === 'N' ?'center':'flex-start'}}>
+      <TouchableOpacity onPress={()=>this.methods.toggleFullscreen()} style={{width: '100%', height: this.props.isPortrait === 'N'?27.5:27.5, alignItems: 'center', justifyContent: this.props.isPortrait === 'N' ?'center':'center'}}>
 
         <Image source={source}  style={{width: 20, height: 20}}/>
       </TouchableOpacity>,
@@ -1364,7 +1390,7 @@ export default class VideoPlayer extends Component {
         <View style={[styles.controls.control, styles.controls.titleTop]}>
           <Text
             style={[styles.controls.textTop]}
-            numberOfLines={2}>
+            numberOfLines={this.props.isPortrait === 'Y'? 1 : 2}>
             {this.opts.title || ''}
           </Text>
         </View>
@@ -1508,6 +1534,8 @@ export default class VideoPlayer extends Component {
    * Provide all of our options and render the whole component.
    */
   render() {
+    
+    
     return (
       <TouchableWithoutFeedback
         onPress={this.events.onScreenTouch}
@@ -1527,7 +1555,7 @@ export default class VideoPlayer extends Component {
             onLoad={this.events.onLoad}
             onEnd={this.events.onEnd}
             onSeek={this.events.onSeek}
-            style={[styles.player.video, this.styles.videoStyle]}
+            style={this.props.isPortrait === 'Y'? [styles.player.isPortraitVideo, this.styles.videoStyle]:[styles.player.video, this.styles.videoStyle]}
             source={this.props.source}
           />
           {this.renderError()}
@@ -1545,6 +1573,7 @@ export default class VideoPlayer extends Component {
  * specific styles and control specific ones.
  * And then there's volume/seeker styles.
  */
+
 const styles = {
   player: StyleSheet.create({
     container: {
@@ -1558,6 +1587,14 @@ const styles = {
       overflow: 'hidden',
       position: 'absolute',
       top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    },
+    isPortraitVideo: {
+      overflow: 'hidden',
+      position: 'absolute',
+      top: 30,
       right: 0,
       bottom: 0,
       left: 0,
@@ -1623,10 +1660,15 @@ const styles = {
       // textAlign: 'center',
       
     },
-    textTop: {
+    textTop: Platform.OS === 'ios' ?{
       backgroundColor: 'transparent',
       color: '#FFF',
-      fontSize: 25,
+      fontSize: 20,
+      // textAlign: 'center',
+    }:{
+      backgroundColor: 'transparent',
+      color: '#FFF',
+      fontSize: 25, 
       // textAlign: 'center',
     },
     likeText: {
@@ -1748,8 +1790,12 @@ const styles = {
       
   
     },
-    titleText: {
-      textAlign: 'center',
+    titleText: Platform.OS === 'ios' ?{
+      textAlign: 'center', 
+      fontSize : 12 
+    }:{
+      textAlign: 'center', 
+      fontSize : 15 
     },
     timer: {
       width: 80,

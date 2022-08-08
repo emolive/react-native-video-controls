@@ -21,8 +21,6 @@
   },
   "dependencies": {
     "lodash": "^4.16.4",
-    "lottie-ios": "^3.4.0",
-    "lottie-react-native": "^5.1.4",
     "react-native-text-ticker": "^1.14.0"
   },
   "peerDependencies": {

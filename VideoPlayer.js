@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import padStart from 'lodash/padStart';
 import {TouchableOpacity, Platform} from 'react-native';
+import TextTicker from 'react-native-text-ticker';
 // bocastle 입장
 export default class VideoPlayer extends Component {
   static defaultProps = {
@@ -1398,11 +1399,22 @@ export default class VideoPlayer extends Component {
     if (this.opts.title) {
       return (
         <View style={[styles.controls.control, styles.controls.titleTop]}>
-          <Text
-            style={[styles.controls.textTop]}
-            numberOfLines={this.props.isPortrait === 'Y' ? 1 : 2}>
-            {this.opts.title || ''}
-          </Text>
+          {this.props.isPortrait === 'N' ? (
+            <Text style={[styles.controls.textTop]} numberOfLines={2}>
+              {this.opts.title || ''}
+            </Text>
+          ) : (
+            <TextTicker
+              style={[styles.controls.textTop]}
+              duration={10000} // 기본세팅 3000
+              loop
+              bounce
+              repeatSpacer={50}
+              marqueeDelay={1000}>
+              {this.opts.title || ''}
+            </TextTicker>
+
+
         </View>
       );
     }

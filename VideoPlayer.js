@@ -19,9 +19,10 @@ import {
 import padStart from 'lodash/padStart';
 import {TouchableOpacity, Platform} from 'react-native';
 import TextTicker from 'react-native-text-ticker';
+import LottieView from 'lottie-react-native';
 // bocastle 입장
 export default class VideoPlayer extends Component {
-  static defaultProps = {
+static defaultProps = {
     toggleResizeModeOnFullscreen: true,
     controlAnimationTiming: 500,
     doubleTapTime: 130,
@@ -38,18 +39,21 @@ export default class VideoPlayer extends Component {
     rate: 1,
     showTimeRemaining: true,
     showHours: false,
-    like: true,
+    like: '',
     subCc: '',
     likeCnt: 0,
     playCnt: 0,
     isPortrait: '',
     vttYn: '',
     userName: '',
+    lottieTest: false,,
   };
+
 
   constructor(props) {
     super(props);
-
+    this.lottieRef = React.createRef();
+    this.playLottieRef = this.playLottieRef.bind(this);
     /**
      * All of our values that are updated by the
      * methods and listeners in this class
@@ -1124,7 +1128,6 @@ export default class VideoPlayer extends Component {
                     <View>{toggleLike}</View>
                     <View>{this.renderLikeCnt()}</View>
                   </View>
-                  {/* <View style={{display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View> */}
                   <View
                     style={{
                       width: '30%',
@@ -1318,14 +1321,40 @@ export default class VideoPlayer extends Component {
   /**
    * Render the play/pause button and show the respective icon
    */
+  playLottieRef() {
+    this.lottieRef.current.play();
+  }
   renderLike() {
     let source =
       this.state.like === true
         ? require('./assets/img/ico_heart_off.png')
         : require('./assets/img/ico_heart_on.png');
+    const lottieSource = require('./assets/img/data.json');
+    // const test
+    // console.log('Test')
+    const {lottieRef, playLottieRef} = this;
+    const likeYn =  this.state.like;
     return (
+      // <TouchableOpacity
+      //   onPress={() => {
+      //     this.methods.toggleLike();
+      //     playLottieRef;
+      //   }
+      // }
+      //   style={{
+      //     width: '100%',
+      //     height: this.props.isPortrait === 'N' ? 27.5 : 27.5,
+      //     alignItems: 'center',
+      //     justifyContent:
+      //     this.props.isPortrait === 'N' ? 'flex-end' : 'flex-start',
+      //   }}>
+      //   <Image source={source} style={{width: 30, height: 30}} />
+      // </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => this.methods.toggleLike()}
+        onPress={() => {
+          this.methods.toggleLike();
+          playLottieRef;
+        }}
         style={{
           width: '100%',
           height: this.props.isPortrait === 'N' ? 27.5 : 27.5,
@@ -1333,8 +1362,28 @@ export default class VideoPlayer extends Component {
           justifyContent:
             this.props.isPortrait === 'N' ? 'flex-end' : 'flex-start',
         }}>
-        <Image source={source} style={{width: 30, height: 30}} />
-      </TouchableOpacity>
+        {likeYn === false ? (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: this.props.isPortrait === 'Y' ? 11 : -5,
+            }}>
+            <LottieView
+              ref={lottieRef}
+              style={{width: 50, height: 50}}
+              source={lottieSource}
+              autoPlay={true}
+              loop={false}
+            />
+          </View>
+        ) : (
+          <View>
+            <Image source={source} style={{width: 30, height: 30}} />
+          </View>
+        )}
+
+        </TouchableOpacity>
     );
   }
 
@@ -1400,9 +1449,18 @@ export default class VideoPlayer extends Component {
       return (
         <View style={[styles.controls.control, styles.controls.titleTop]}>
           {this.props.isPortrait === 'N' ? (
-            <Text style={[styles.controls.textTop]} numberOfLines={2}>
+            // <Text style={[styles.controls.textTop]} numberOfLines={2}>
+            //   {this.opts.title || ''}
+            // </Text>
+            <TextTicker
+              style={[styles.controls.textTop]}
+              duration={10000} // 기본세팅 3000
+              loop
+              bounce
+              repeatSpacer={50}
+              marqueeDelay={1000}>
               {this.opts.title || ''}
-            </Text>
+            </TextTicker>
           ) : (
             <TextTicker
               style={[styles.controls.textTop]}

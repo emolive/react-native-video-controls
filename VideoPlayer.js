@@ -20,7 +20,7 @@ import padStart from 'lodash/padStart';
 import {TouchableOpacity, Platform} from 'react-native';
 import TextTicker from 'react-native-text-ticker';
 import LottieView from 'lottie-react-native';
-// bocastle 입장
+
 export default class VideoPlayer extends Component {
 static defaultProps = {
     toggleResizeModeOnFullscreen: true,
@@ -1034,9 +1034,6 @@ static defaultProps = {
                       View{' '}
                     </Text>
                     {this.renderPlayCnt()}
-
-                    {/* <View style={{backgroundColor:"black"}}><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View> */}
-                    {/* <View style={{backgroundColor:"blue"}}>{this.renderPlayCnt()}</View> */}
                   </View>
                 </View>
                 <View
@@ -1058,7 +1055,6 @@ static defaultProps = {
                     <View>{toggleLike}</View>
                     <View>{this.renderLikeCnt()}</View>
                   </View>
-                  {/* <View style={{display: vttYn === true ? 'flex' : 'none'}}>{toggleSubCc}</View> */}
                   <View
                     style={{
                       width: '30%',
@@ -1089,7 +1085,6 @@ static defaultProps = {
             style={[styles.controls.column]}
             imageStyle={[styles.controls.vignette]}>
             <SafeAreaView style={styles.controls.topControlGroup}>
-              {/* <View style={{height:'100%'}}>{backControl}</View> */}
               <View style={{width: '100%', flexDirection: 'row'}}>
                 <View style={{width: '10%', alignItems: 'center'}}>
                   <View style={{width: '100%'}}>{backControl}</View>
@@ -1105,9 +1100,6 @@ static defaultProps = {
                       View{' '}
                     </Text>
                     {this.renderPlayCnt()}
-
-                    {/* <View style={{backgroundColor:"black"}}><Text  style={[styles.controls.text, styles.controls.titleText]}>View  </Text></View> */}
-                    {/* <View style={{backgroundColor:"blue"}}>{this.renderPlayCnt()}</View> */}
                   </View>
                 </View>
                 <View
@@ -1140,6 +1132,78 @@ static defaultProps = {
               </View>
             </SafeAreaView>
           </ImageBackground>
+        </Animated.View>
+      );
+    }
+  }
+
+  renderCenterControls() {
+    const backControl = this.props.disableBack
+      ? this.renderNullControl()
+      : this.renderBack();
+    const fullscreenControl = this.props.disableFullscreen
+      ? this.renderNullControl()
+      : this.renderFullscreen();
+    const toggleLike = this.renderLike();
+    const toggleSubCc = this.renderSub();
+    const isPortrait = this.props.isPortrait;
+    const vttYn = this.props.vttYn;
+
+    const playPauseControl = this.props.disablePlayPause
+      ? this.renderNullControl()
+      : this.renderCenterPlayPause();
+
+    if (isPortrait === 'N') {
+      return (
+        <Animated.View
+          style={[
+            styles.controls.center,
+            {
+              opacity: this.animations.topControl.opacity,
+              marginTop: this.animations.topControl.marginTop,
+            },
+          ]}>
+ <SafeAreaView style={styles.controls.centerControlGroup}>
+            <View style={{width: '100%', flexDirection: 'row'}}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'flex-end',
+                }}>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  {playPauseControl}
+                </View>
+              </View>
+            </View>
+          </SafeAreaView>
+        </Animated.View>
+      );
+    }
+    if (isPortrait === 'Y') {
+      return (
+        <Animated.View
+          style={[
+            styles.controls.center,
+            {
+              opacity: this.animations.topControl.opacity,
+              marginTop: this.animations.topControl.marginTop,
+            },
+          ]}>
+ <SafeAreaView style={styles.controls.centerControlGroup}>
+            <View style={{width: '100%', flexDirection: 'row'}}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'flex-end',
+                }}>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  {playPauseControl}
+                </View>
+              </View>
+            </View>
+ </SafeAreaView>
         </Animated.View>
       );
     }
@@ -1317,6 +1381,35 @@ static defaultProps = {
       styles.controls.playPause,
     );
   }
+  renderCenterPlayPause() {
+    let source =
+      this.state.paused === true
+        ? require('./assets/img/play.png')
+        : require('./assets/img/pause.png');
+    return this.renderControl(
+      <TouchableOpacity
+        onPress={() => this.methods.togglePlayPause()}
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          borderRadius: 50,
+        }}>
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            height: 30,
+            width: 30,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 50,
+          }}>
+          <Image source={source} />
+        </View>
+      </TouchableOpacity>,
+      this.methods.togglePlayPause,
+      styles.controls.centerPlayPause,
+    );
+  }
 
   /**
    * Render the play/pause button and show the respective icon
@@ -1330,26 +1423,9 @@ static defaultProps = {
         ? require('./assets/img/ico_heart_off.png')
         : require('./assets/img/ico_heart_on.png');
     const lottieSource = require('./assets/img/data.json');
-    // const test
-    // console.log('Test')
     const {lottieRef, playLottieRef} = this;
     const likeYn =  this.state.like;
     return (
-      // <TouchableOpacity
-      //   onPress={() => {
-      //     this.methods.toggleLike();
-      //     playLottieRef;
-      //   }
-      // }
-      //   style={{
-      //     width: '100%',
-      //     height: this.props.isPortrait === 'N' ? 27.5 : 27.5,
-      //     alignItems: 'center',
-      //     justifyContent:
-      //     this.props.isPortrait === 'N' ? 'flex-end' : 'flex-start',
-      //   }}>
-      //   <Image source={source} style={{width: 30, height: 30}} />
-      // </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
           this.methods.toggleLike();
@@ -1392,7 +1468,6 @@ static defaultProps = {
       this.state.subCc === true
         ? require('./assets/img/ico_cc_on.png')
         : require('./assets/img/ico_cc_off.png');
-    // let source =require('./assets/img/ico_cc_off.png');
     return (
       <TouchableOpacity
         onPress={() => this.methods.toggleSubCc()}
@@ -1449,9 +1524,6 @@ static defaultProps = {
       return (
         <View style={[styles.controls.control, styles.controls.titleTop]}>
           {this.props.isPortrait === 'N' ? (
-            // <Text style={[styles.controls.textTop]} numberOfLines={2}>
-            //   {this.opts.title || ''}
-            // </Text>
             <TextTicker
               style={[styles.controls.textTop]}
               duration={10000} // 기본세팅 3000
@@ -1481,7 +1553,6 @@ static defaultProps = {
   renderLikeCnt() {
     if (!isNaN(this.opts.likeCnt)) {
       return (
-        // <View style={ {justifyContent: 'center', height: '100%'}}>
         <View style={{width: '100%', height: 20, justifyContent: 'flex-start'}}>
           <Text style={styles.controls.likeText} numberOfLines={1}>
             {this.opts.likeCnt === 0 ? '' : this.opts.likeCnt}
@@ -1491,7 +1562,6 @@ static defaultProps = {
     }
     if (this.opts.likeCnt !== '') {
       return (
-        // <View style={ {justifyContent: 'center', height: '100%'}}>
         <View style={{width: 50, height: 40, justifyContent: 'flex-start'}}>
           <Text style={styles.controls.likeText} numberOfLines={1}>
             {this.opts.likeCnt === 0 ? '' : this.opts.likeCnt}
@@ -1532,7 +1602,6 @@ static defaultProps = {
   renderUserName() {
     if (this.opts.userName !== '') {
       return (
-        // <View style={ {justifyContent: 'center', height: '100%', marginRight: 5}}>
         <View>
           <Text
             style={[styles.controls.text, styles.controls.titleText]}
@@ -1630,10 +1699,12 @@ static defaultProps = {
                 : [styles.player.video, this.styles.videoStyle]
             }
             source={this.props.source}
+
           />
           {this.renderError()}
           {this.renderLoader()}
           {this.renderTopControls()}
+          {this.renderCenterControls()}
           {this.renderBottomControls()}
         </View>
       </TouchableWithoutFeedback>
@@ -1722,27 +1793,24 @@ const styles = {
       resizeMode: 'stretch',
     },
     control: {
-      padding: 0, //16
+      padding: 0,
     },
     text: {
       backgroundColor: 'transparent',
       color: '#FFF',
       fontSize: 14,
-      // textAlign: 'center',
-    },
+},
     textTop:
       Platform.OS === 'ios'
         ? {
             backgroundColor: 'transparent',
             color: '#FFF',
             fontSize: 20,
-            // textAlign: 'center',
           }
         : {
             backgroundColor: 'transparent',
             color: '#FFF',
             fontSize: 25,
-            // textAlign: 'center',
           },
     likeText: {
       backgroundColor: 'transparent',
@@ -1760,23 +1828,16 @@ const styles = {
     },
     topCenter: {
       alignItems: 'center',
-      // justifyContent: 'center',
       flexDirection: 'column',
       width: '70%',
-      // height:40
     },
     topCenterPortrait: {
       alignItems: 'center',
       flexDirection: 'column',
       width: '45%',
       paddingTop: 11,
-      // height:40
     },
     topTitleCenter: {
-      // alignItems: 'center',
-      // justifyContent: 'flex-start',
-      // flexDirection:'column',
-
       width: '100%',
     },
     topTitleCenterPortrait: {
@@ -1801,6 +1862,11 @@ const styles = {
       alignItems: 'stretch',
       justifyContent: 'flex-start',
     },
+    center: {
+      flex: 1,
+      alignItems: 'stretch',
+      justifyContent: 'center',
+    },
     bottom: {
       alignItems: 'stretch',
       flex: 2,
@@ -1816,12 +1882,17 @@ const styles = {
       marginBottom: 18,
     },
     topControlGroupPortrait: {
-      // alignSelf: 'stretch',
-      // alignItems: 'flex-start',
       flexDirection: 'row',
       width: null,
-      // margin: 12,
-      // marginBottom: 18,
+    },
+    centerControlGroup: {
+      alignSelf: 'stretch',
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+      width: null,
+      height: '100%',
+      margin: 12,
+      marginBottom: 18,
     },
     bottomControlGroup: {
       alignSelf: 'stretch',
@@ -1842,6 +1913,10 @@ const styles = {
       width: 80,
       zIndex: 0,
     },
+    centerPlayPause: {
+      position: 'relative',
+      zIndex: 0,
+    },
     title: {
       alignItems: 'center',
       flex: 0.6,
@@ -1849,13 +1924,7 @@ const styles = {
       padding: 0,
     },
     titleTop: {
-      // alignItems: 'flex-start',
-      // flex: 0.6,
       width: '100%',
-      // flexDirection: 'column',
-      // justifyContent:'center',
-      // padding: 0,
-      // backgroundColor:'gold'
     },
     titleText:
       Platform.OS === 'ios'

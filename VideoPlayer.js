@@ -32,6 +32,7 @@ static defaultProps = {
     isFullscreen: false,
     showOnStart: false,
     paused: false,
+    timeNext: false,
     repeat: false,
     muted: false,
     volume: 1,
@@ -134,6 +135,8 @@ static defaultProps = {
     this.methods = {
       toggleFullscreen: this._toggleFullscreen.bind(this),
       togglePlayPause: this._togglePlayPause.bind(this),
+      togglePlayNext: this._togglePlayNext.bind(this),
+      togglePlayBack: this._togglePlayBack.bind(this),
       toggleControls: this._toggleControls.bind(this),
       toggleTimer: this._toggleTimer.bind(this),
       toggleLike: this._toggleLike.bind(this),
@@ -543,6 +546,21 @@ static defaultProps = {
 
     this.setState(state);
   }
+  _togglePlayNext() {
+    let state = this.state;
+    if  (state.duration === state.currentTime) {
+      this.events.onEnd();
+    }  else  {
+      this.seekTo(state.currentTime + 10);
+    }
+  }
+  _togglePlayBack() {
+    let state = this.state;
+    if  (state.currentTime === 0) {
+    }  else  {
+      this.seekTo(state.currentTime - 10);
+    }
+  }
 
   /**
    * Toggle between showing time remaining or
@@ -872,7 +890,7 @@ static defaultProps = {
 
             this.setState(state);
             setTimeout(() => {
-              this.player.ref.seek(time, this.player.scrubbingTimeStep);
+this.player.ref.seek(time, this.player.scrubbingTimeStep);
             }, 1);
           }
         }
@@ -1138,20 +1156,17 @@ static defaultProps = {
   }
 
   renderCenterControls() {
-    const backControl = this.props.disableBack
-      ? this.renderNullControl()
-      : this.renderBack();
-    const fullscreenControl = this.props.disableFullscreen
-      ? this.renderNullControl()
-      : this.renderFullscreen();
-    const toggleLike = this.renderLike();
-    const toggleSubCc = this.renderSub();
     const isPortrait = this.props.isPortrait;
-    const vttYn = this.props.vttYn;
-
     const playPauseControl = this.props.disablePlayPause
       ? this.renderNullControl()
       : this.renderCenterPlayPause();
+
+    const playNextControl = this.props.disablePlayPause
+      ? this.renderNullControl()
+      : this.renderCenterPlayNext();
+    const playBackControl = this.props.disablePlayPause
+      ? this.renderNullControl()
+      : this.renderCenterPlayBack();
 
     if (isPortrait === 'N') {
       return (
@@ -1163,11 +1178,26 @@ static defaultProps = {
               marginTop: this.animations.topControl.marginTop,
             },
           ]}>
- <SafeAreaView style={styles.controls.centerControlGroup}>
-            <View style={{width: '100%', flexDirection: 'row'}}>
+          <SafeAreaView style={styles.controls.centerControlGroup}>
+            <View
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}>
               <View
                 style={{
-                  width: '100%',
+                  width: '30%',
+                  height: '100%',
+                  justifyContent: 'flex-end',
+                }}>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  {playBackControl}
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '30%',
                   height: '100%',
                   justifyContent: 'flex-end',
                 }}>
@@ -1175,8 +1205,18 @@ static defaultProps = {
                   {playPauseControl}
                 </View>
               </View>
+              <View
+                style={{
+                  width: '30%',
+                  height: '100%',
+                  justifyContent: 'flex-end',
+                }}>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  {playNextControl}
+                </View>
+              </View>
             </View>
-          </SafeAreaView>
+ </SafeAreaView>
         </Animated.View>
       );
     }
@@ -1191,15 +1231,40 @@ static defaultProps = {
             },
           ]}>
  <SafeAreaView style={styles.controls.centerControlGroup}>
-            <View style={{width: '100%', flexDirection: 'row'}}>
+            <View
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}>
               <View
                 style={{
-                  width: '100%',
+                  width: '30%',
+                  height: '100%',
+                  justifyContent: 'flex-end',
+                }}>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  {playBackControl}
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '30%',
                   height: '100%',
                   justifyContent: 'flex-end',
                 }}>
                 <View style={{width: '100%', alignItems: 'center'}}>
                   {playPauseControl}
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '30%',
+                  height: '100%',
+                  justifyContent: 'flex-end',
+                }}>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  {playNextControl}
                 </View>
               </View>
             </View>
@@ -1408,6 +1473,55 @@ static defaultProps = {
       </TouchableOpacity>,
       this.methods.togglePlayPause,
       styles.controls.centerPlayPause,
+    );
+  }
+  renderCenterPlayNext() {
+    let source = require('./assets/img/play.png');
+    return this.renderControl(
+      <TouchableOpacity
+        onPress={() => this.methods.togglePlayNext()}
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          borderRadius: 50,,
+
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            height: 30,
+            width: 30,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 50,
+          }}>
+          <Image source={source} />
+        </View>
+      </TouchableOpacity>,
+    );
+  }
+  renderCenterPlayBack() {
+    let source = require('./assets/img/play.png');
+    return this.renderControl(
+      <TouchableOpacity
+        onPress={() => this.methods.togglePlayBack()}
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          borderRadius: 50,
+          transform: [{rotate: '180deg'}],
+
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            height: 30,
+            width: 30,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 50,
+          }}>
+          <Image source={source} />
+        </View>
+      </TouchableOpacity>,
     );
   }
 

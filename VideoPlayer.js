@@ -114,6 +114,8 @@ static defaultProps = {
       onBack: this.props.onBack || this._onBack.bind(this),
       onEnd: this.props.onEnd || this._onEnd.bind(this),
       onScreenTouch: this._onScreenTouch.bind(this),
+      onScreenNextTouch: this._onScreenNextTouch.bind(this),
+      onScreenBackTouch: this._onScreenBackTouch.bind(this),
       onEnterFullscreen: this.props.onEnterFullscreen,
       onExitFullscreen: this.props.onExitFullscreen,
       onShowControls: this.props.onShowControls,
@@ -325,7 +327,7 @@ static defaultProps = {
    * two toggles fullscreen mode.
    */
   _onScreenTouch() {
-    if (this.player.tapActionTimeout) {
+if (this.player.tapActionTimeout) {
       clearTimeout(this.player.tapActionTimeout);
       this.player.tapActionTimeout = 0;
       this.methods.toggleFullscreen();
@@ -336,6 +338,57 @@ static defaultProps = {
     } else {
       this.player.tapActionTimeout = setTimeout(() => {
         const state = this.state;
+        if (this.player.tapAnywhereToPause && state.showControls) {
+          this.methods.togglePlayPause();
+          this.resetControlTimeout();
+        } else {
+          this.methods.toggleControls();
+        }
+        this.player.tapActionTimeout = 0;
+      }, this.props.doubleTapTime);
+    }
+  }
+  _onScreenNextTouch() {
+ if (this.player.tapActionTimeout) {
+      clearTimeout(this.player.tapActionTimeout);
+      this.player.tapActionTimeout = 0;
+      const state = this.state;
+      if (state.showControls) {
+        this.resetControlTimeout();
+      }
+      if  (state.duration === state.currentTime) {
+        this.events.onEnd();
+      }  else  {
+        this.seekTo(state.currentTime + 10);
+      }
+    } else {
+      this.player.tapActionTimeout = setTimeout(() => {
+const state = this.state;
+        if (this.player.tapAnywhereToPause && state.showControls) {
+          this.methods.togglePlayPause();
+          this.resetControlTimeout();
+        } else {
+          this.methods.toggleControls();
+        }
+        this.player.tapActionTimeout = 0;
+      }, this.props.doubleTapTime);
+    }
+  }
+  _onScreenBackTouch() {
+    if (this.player.tapActionTimeout) {
+      clearTimeout(this.player.tapActionTimeout);
+      this.player.tapActionTimeout = 0;
+      const state = this.state;
+      if (state.showControls) {
+        this.resetControlTimeout();
+      }
+      if  (state.currentTime === 0) {
+      }  else  {
+        this.seekTo(state.currentTime - 10);
+      }
+    } else {
+      this.player.tapActionTimeout = setTimeout(() => {
+const state = this.state;
         if (this.player.tapAnywhereToPause && state.showControls) {
           this.methods.togglePlayPause();
           this.resetControlTimeout();
@@ -513,13 +566,10 @@ static defaultProps = {
    */
   _toggleFullscreen() {
     let state = this.state;
-
     state.isFullscreen = !state.isFullscreen;
-
     if (this.props.toggleResizeModeOnFullscreen) {
       state.resizeMode = state.isFullscreen === true ? 'cover' : 'contain';
     }
-
     if (state.isFullscreen) {
       typeof this.events.onEnterFullscreen === 'function' &&
         this.events.onEnterFullscreen();
@@ -527,7 +577,6 @@ static defaultProps = {
       typeof this.events.onExitFullscreen === 'function' &&
         this.events.onExitFullscreen();
     }
-
     this.setState(state);
   }
 
@@ -890,7 +939,7 @@ static defaultProps = {
 
             this.setState(state);
             setTimeout(() => {
-this.player.ref.seek(time, this.player.scrubbingTimeStep);
+              this.player.ref.seek(time, this.player.scrubbingTimeStep);
             }, 1);
           }
         }
@@ -1182,6 +1231,7 @@ this.player.ref.seek(time, this.player.scrubbingTimeStep);
             <View
               style={{
                 width: '100%',
+                height: '100%',
                 justifyContent: 'center',
                 flexDirection: 'row',
               }}>
@@ -1189,17 +1239,25 @@ this.player.ref.seek(time, this.player.scrubbingTimeStep);
                 style={{
                   width: '30%',
                   height: '100%',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
                 }}>
-                <View style={{width: '100%', alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={this.events.onScreenBackTouch}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   {playBackControl}
-                </View>
+                </TouchableOpacity>
+                {/* <View style={{width: '100%',alignItems:'center'}}>{playBackControl}</View> */}
               </View>
               <View
                 style={{
                   width: '30%',
                   height: '100%',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
                 }}>
                 <View style={{width: '100%', alignItems: 'center'}}>
                   {playPauseControl}
@@ -1209,14 +1267,22 @@ this.player.ref.seek(time, this.player.scrubbingTimeStep);
                 style={{
                   width: '30%',
                   height: '100%',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
                 }}>
-                <View style={{width: '100%', alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={this.events.onScreenNextTouch}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   {playNextControl}
-                </View>
+                </TouchableOpacity>
+                {/* <View style={{width: '100%',alignItems:'center'}}>{playNextControl}</View> */}
               </View>
             </View>
- </SafeAreaView>
+          </SafeAreaView>
         </Animated.View>
       );
     }
@@ -1234,6 +1300,7 @@ this.player.ref.seek(time, this.player.scrubbingTimeStep);
             <View
               style={{
                 width: '100%',
+                height: '100%',
                 justifyContent: 'center',
                 flexDirection: 'row',
               }}>
@@ -1241,17 +1308,25 @@ this.player.ref.seek(time, this.player.scrubbingTimeStep);
                 style={{
                   width: '30%',
                   height: '100%',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
                 }}>
-                <View style={{width: '100%', alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={this.events.onScreenBackTouch}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   {playBackControl}
-                </View>
+                </TouchableOpacity>
+                {/* <View style={{width: '100%',alignItems:'center'}}>{playBackControl}</View> */}
               </View>
               <View
                 style={{
                   width: '30%',
                   height: '100%',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
                 }}>
                 <View style={{width: '100%', alignItems: 'center'}}>
                   {playPauseControl}
@@ -1261,14 +1336,22 @@ this.player.ref.seek(time, this.player.scrubbingTimeStep);
                 style={{
                   width: '30%',
                   height: '100%',
-                  justifyContent: 'flex-end',
+                  justifyContent: 'center',
                 }}>
-                <View style={{width: '100%', alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={this.events.onScreenNextTouch}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   {playNextControl}
-                </View>
+                </TouchableOpacity>
+                {/* <View style={{width: '100%',alignItems:'center'}}>{playNextControl}</View> */}
               </View>
             </View>
- </SafeAreaView>
+          </SafeAreaView>
         </Animated.View>
       );
     }
@@ -1483,8 +1566,8 @@ this.player.ref.seek(time, this.player.scrubbingTimeStep);
         style={{
           width: '100%',
           justifyContent: 'center',
-          borderRadius: 50,,
-
+          borderRadius: 50,
+        }}>
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,0.7)',
@@ -1977,13 +2060,13 @@ const styles = {
       justifyContent: 'flex-start',
     },
     center: {
-      flex: 1,
+      flex: 3,
       alignItems: 'stretch',
       justifyContent: 'center',
     },
     bottom: {
       alignItems: 'stretch',
-      flex: 2,
+      flex: 1,
       justifyContent: 'flex-end',
     },
     topControlGroup: {

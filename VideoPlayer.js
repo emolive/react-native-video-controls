@@ -330,7 +330,7 @@ static defaultProps = {
 if (this.player.tapActionTimeout) {
       clearTimeout(this.player.tapActionTimeout);
       this.player.tapActionTimeout = 0;
-      this.methods.toggleFullscreen();
+      // this.methods.toggleFullscreen(); // 전체 화면 필수 아님.
       const state = this.state;
       if (state.showControls) {
         this.resetControlTimeout();

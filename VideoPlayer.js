@@ -1108,8 +1108,8 @@ export default class VideoPlayer extends Component {
                       ? {
                           width: '20%',
                           flexDirection: 'row',
-                          justifyContent: 'flex-end',
-                          marginLeft: 30,
+                          justifyContent: 'center',
+                          marginLeft: 15,
                         }
                       : {
                           width: '20%',

@@ -22,7 +22,7 @@ import TextTicker from 'react-native-text-ticker';
 import LottieView from 'lottie-react-native';
 
 export default class VideoPlayer extends Component {
-static defaultProps = {
+  static defaultProps = {
     toggleResizeModeOnFullscreen: true,
     controlAnimationTiming: 500,
     doubleTapTime: 130,
@@ -47,9 +47,8 @@ static defaultProps = {
     isPortrait: '',
     vttYn: '',
     userName: '',
-    lottieTest: false,,
+    lottieTest: false,
   };
-
 
   constructor(props) {
     super(props);
@@ -327,7 +326,7 @@ static defaultProps = {
    * two toggles fullscreen mode.
    */
   _onScreenTouch() {
-if (this.player.tapActionTimeout) {
+    if (this.player.tapActionTimeout) {
       clearTimeout(this.player.tapActionTimeout);
       this.player.tapActionTimeout = 0;
       // this.methods.toggleFullscreen(); // 전체 화면 필수 아님.
@@ -349,21 +348,21 @@ if (this.player.tapActionTimeout) {
     }
   }
   _onScreenNextTouch() {
- if (this.player.tapActionTimeout) {
+    if (this.player.tapActionTimeout) {
       clearTimeout(this.player.tapActionTimeout);
       this.player.tapActionTimeout = 0;
       const state = this.state;
       if (state.showControls) {
         this.resetControlTimeout();
       }
-      if  (state.duration === state.currentTime) {
+      if (state.duration === state.currentTime) {
         this.events.onEnd();
-      }  else  {
+      } else {
         this.seekTo(state.currentTime + 10);
       }
     } else {
       this.player.tapActionTimeout = setTimeout(() => {
-const state = this.state;
+        const state = this.state;
         if (this.player.tapAnywhereToPause && state.showControls) {
           this.methods.togglePlayPause();
           this.resetControlTimeout();
@@ -382,13 +381,13 @@ const state = this.state;
       if (state.showControls) {
         this.resetControlTimeout();
       }
-      if  (state.currentTime === 0) {
-      }  else  {
+      if (state.currentTime === 0) {
+      } else {
         this.seekTo(state.currentTime - 10);
       }
     } else {
       this.player.tapActionTimeout = setTimeout(() => {
-const state = this.state;
+        const state = this.state;
         if (this.player.tapAnywhereToPause && state.showControls) {
           this.methods.togglePlayPause();
           this.resetControlTimeout();
@@ -597,16 +596,16 @@ const state = this.state;
   }
   _togglePlayNext() {
     let state = this.state;
-    if  (state.duration === state.currentTime) {
+    if (state.duration === state.currentTime) {
       this.events.onEnd();
-    }  else  {
+    } else {
       this.seekTo(state.currentTime + 10);
     }
   }
   _togglePlayBack() {
     let state = this.state;
-    if  (state.currentTime === 0) {
-    }  else  {
+    if (state.currentTime === 0) {
+    } else {
       this.seekTo(state.currentTime - 10);
     }
   }
@@ -1296,7 +1295,7 @@ const state = this.state;
               marginTop: this.animations.topControl.marginTop,
             },
           ]}>
- <SafeAreaView style={styles.controls.centerControlGroup}>
+          <SafeAreaView style={styles.controls.centerControlGroup}>
             <View
               style={{
                 width: '100%',
@@ -1592,7 +1591,7 @@ const state = this.state;
           justifyContent: 'center',
           borderRadius: 50,
           transform: [{rotate: '180deg'}],
-
+        }}>
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,0.7)',
@@ -1621,7 +1620,7 @@ const state = this.state;
         : require('./assets/img/ico_heart_on.png');
     const lottieSource = require('./assets/img/data.json');
     const {lottieRef, playLottieRef} = this;
-    const likeYn =  this.state.like;
+    const likeYn = this.state.like;
     return (
       <TouchableOpacity
         onPress={() => {
@@ -1640,7 +1639,7 @@ const state = this.state;
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              marginBottom: this.props.isPortrait === 'Y' ? 11 : -5,
+              marginBottom: this.props.isPortrait === 'Y' ? 20 : -5,
             }}>
             <LottieView
               ref={lottieRef}
@@ -1655,8 +1654,7 @@ const state = this.state;
             <Image source={source} style={{width: 30, height: 30}} />
           </View>
         )}
-
-        </TouchableOpacity>
+      </TouchableOpacity>
     );
   }
 
@@ -1896,7 +1894,6 @@ const state = this.state;
                 : [styles.player.video, this.styles.videoStyle]
             }
             source={this.props.source}
-
           />
           {this.renderError()}
           {this.renderLoader()}
@@ -1996,7 +1993,7 @@ const styles = {
       backgroundColor: 'transparent',
       color: '#FFF',
       fontSize: 14,
-},
+    },
     textTop:
       Platform.OS === 'ios'
         ? {
